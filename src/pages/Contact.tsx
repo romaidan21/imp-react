@@ -6,7 +6,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { MapPin, Phone, Mail, MessageCircle, Send } from "lucide-react";
 import { submitContactDefault } from "@/data/defaultData";
 
@@ -20,7 +19,6 @@ type FormValues = z.infer<typeof formSchema>;
 
 export function Contact() {
   const { t } = useI18n();
-  const { toast } = useToast();
   const [isPending, setIsPending] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>({
@@ -31,18 +29,10 @@ export function Contact() {
     try {
       setIsPending(true);
       await submitContactDefault(data);
-      toast({
-        title: "Успіх",
-        description: t("form.success"),
-        variant: "default"
-      });
+
       reset();
     } catch {
-      toast({
-        title: "Помилка",
-        description: t("form.error"),
-        variant: "destructive"
-      });
+
     } finally {
       setIsPending(false);
     }
